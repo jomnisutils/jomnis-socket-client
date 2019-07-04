@@ -1,5 +1,5 @@
-import { ISocketClient } from "./ISocketClient"
-import { HandlerCallback } from "./types"
+import { ISocketClient } from './ISocketClient'
+import { HandlerCallback, JOmnis } from './types'
 
 export class OmnisSocketClient implements ISocketClient {
     socket: JOmnis
@@ -12,16 +12,16 @@ export class OmnisSocketClient implements ISocketClient {
         // Prepara il callback object con i metodi standard di omnis
         this.callbackObject = {
             omnisOnLoad: () => {
-                console.info("omnisOnLoad")
+                console.info('omnisOnLoad')
             },
             omnisOnWebSocketOpened: () => {
-                console.info("omnisOnWebSocketOpened")
-                this.fire("socketReady")
+                console.info('omnisOnWebSocketOpened')
+                this.fire('socketReady')
             },
             test: data => {
-                console.log("TEST!")
+                console.log('TEST!')
                 console.log(data)
-            },
+            }
         }
     }
 

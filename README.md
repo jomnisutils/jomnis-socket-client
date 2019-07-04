@@ -5,7 +5,9 @@ This simple library contains a wrapper class for the `jOmnis` object exposed fro
 ## Usage
 
 ```typescript
-import {  SocketClient, ISocketClient, OmnisSocketClient } from "jomnis-socket-client"
+import { JOmnis, SocketClient, ISocketClient, OmnisSocketClient } from "jomnis-socket-client"
+
+declare var jOmnis: JOmnis // JOmnis has to be globally available
 
 const isOmnis: boolean = /* ...*/
 
@@ -15,3 +17,8 @@ socketClient.on("socketReady", () => {
     socketClient.sendMessage("evAppReady")
 })
 ```
+
+## TODO list
+
+-   A better example
+-   A better `JOmnis` type declaration
