@@ -1,40 +1,40 @@
-import { ISocketClient } from './ISocketClient'
-import { HandlerCallback, JOmnis } from './types'
+import { ISocketClient } from "./ISocketClient"
+import { HandlerCallback, JOmnis } from "./types"
 
 export class OmnisSocketClient implements ISocketClient {
-    socket: JOmnis
-    callbacks: Map<string, HandlerCallback>
-    callbackObject: { [message: string]: HandlerCallback }
+    private socket: JOmnis
+    private callbacks: Map<string, HandlerCallback>
+    private callbackObject: { [message: string]: HandlerCallback }
 
-    constructor(omnisSocket: JOmnis) {
+    public constructor(omnisSocket: JOmnis) {
         this.callbacks = new Map()
         this.socket = omnisSocket
         // Prepara il callback object con i metodi standard di omnis
         this.callbackObject = {
-            omnisOnLoad: () => {
-                console.info('omnisOnLoad')
+            omnisOnLoad: (): void => {
+                console.info("omnisOnLoad")
             },
-            omnisOnWebSocketOpened: () => {
-                console.info('omnisOnWebSocketOpened')
-                this.fire('socketReady')
+            omnisOnWebSocketOpened: (): void => {
+                console.info("omnisOnWebSocketOpened")
+                this.fire("socketReady")
             },
-            test: data => {
-                console.log('TEST!')
+            test: (data: any): void => {
+                console.log("TEST!")
                 console.log(data)
-            }
+            },
         }
     }
 
-    private fire(evName: string, evData?: any) {
+    private fire(evName: string, evData?: any): void {
         const callback = this.callbacks.get(evName)
         if (callback) {
             callback(evData)
         }
     }
 
-    on(messageName: string, handler: HandlerCallback) {
+    public on(messageName: string, handler: HandlerCallback): void {
         this.callbacks.set(messageName, handler)
-        this.callbackObject[messageName] = (evData: string) => {
+        this.callbackObject[messageName] = (evData: string): void => {
             const parsedData = JSON.parse(evData)
             console.log(`Ricevuto messaggio ${messageName}`, evData, parsedData)
 
@@ -42,7 +42,7 @@ export class OmnisSocketClient implements ISocketClient {
         }
     }
 
-    open() {
+    public open(): void {
         if (this.socket.callbackHotSwap) {
             this.socket.callbackHotSwap(this.callbackObject)
         } else {
@@ -50,7 +50,7 @@ export class OmnisSocketClient implements ISocketClient {
         }
     }
 
-    sendMessage(name: string, data?: any) {
+    public sendMessage(name: string, data?: any): void {
         console.info(`Invio l'evento ${name} `, data)
         if (!data) {
             data = {}
@@ -58,7 +58,7 @@ export class OmnisSocketClient implements ISocketClient {
         this.socket.sendControlEvent({ name: name, data: JSON.stringify(data) })
     }
 
-    close() {
+    public close(): void {
         // NO-OP
     }
 }

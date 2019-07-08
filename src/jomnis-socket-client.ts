@@ -3,7 +3,7 @@
 // ...
 // import 'core-js'
 
-export * from './ISocketClient'
-export * from './SocketClient'
-export * from './OmnisSocketClient'
-export * from './types'
+export * from "./ISocketClient"
+export * from "./SocketClient"
+export * from "./OmnisSocketClient"
+export * from "./types"

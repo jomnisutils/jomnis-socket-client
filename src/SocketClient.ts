@@ -2,53 +2,53 @@ import { ISocketClient } from "./ISocketClient"
 import { HandlerCallback } from "./types"
 
 export class SocketClient implements ISocketClient {
-    wsAddress: string
-    socket: WebSocket | null
-    callbacks: Map<string, HandlerCallback>
+    public wsAddress: string
+    private socket: WebSocket | null
+    private callbacks: Map<string, HandlerCallback>
 
-    constructor(wsAddress: string) {
+    public constructor(wsAddress: string) {
         this.wsAddress = wsAddress
         this.socket = null
         this.callbacks = new Map()
     }
 
-    private fire(evName: string, evData?: any) {
+    private fire(evName: string, evData?: any): void {
         const callback = this.callbacks.get(evName)
         if (callback) {
             callback(evData)
         }
     }
 
-    on(evName: string, callback: HandlerCallback) {
+    public on(evName: string, callback: HandlerCallback): void {
         this.callbacks.set(evName, callback)
     }
 
-    open() {
+    public open(): void {
         this.socket = new WebSocket(this.wsAddress)
 
-        this.socket.onopen = () => {
+        this.socket.onopen = (): void => {
             console.info(`Yay! Connesso a ${this.wsAddress}!`)
             this.fire("socketReady")
         }
 
-        this.socket.onmessage = (e: any | { data: any }) => {
+        this.socket.onmessage = (e: any | { data: any }): void => {
             // console.info("Yay! C'è un messaggio!", e.data)
             const evData = JSON.parse(e.data)
             this.fire(evData.name, evData.data)
         }
 
-        this.socket.onerror = (e: any | { data: any }) => {
+        this.socket.onerror = (e: any | { data: any }): void => {
             console.error("Oh shit!", e.data)
             this.fire("socketError", e.data)
         }
 
-        this.socket.onclose = () => {
+        this.socket.onclose = (): void => {
             console.warn("Il server mi ha abbandonato!")
             this.fire("socketClose")
         }
     }
 
-    sendMessage(message: string, data?: any) {
+    public sendMessage(message: string, data?: any): void {
         console.log(`Sending message ${message}`)
         const jsonMessage = JSON.stringify({
             name: message,
@@ -62,7 +62,7 @@ export class SocketClient implements ISocketClient {
         }
     }
 
-    close() {
+    public close(): void {
         if (this.socket) {
             this.socket.close()
         }
