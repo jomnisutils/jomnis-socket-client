@@ -1,4 +1,6 @@
-export declare type HandlerCallback = (data: any) => void
+declare type SendResultEventFunction = (name: string, data?: any) => void
+
+export declare type HandlerCallback = (req: any, res: SendResultEventFunction) => void
 
 export declare type JOmnis = {
     sendControlEvent: (data: any) => void

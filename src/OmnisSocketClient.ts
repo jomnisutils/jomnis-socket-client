@@ -1,13 +1,12 @@
-import { ISocketClient } from "./ISocketClient"
+import { AbstractSocketClient } from "./AbstractSocketClient"
 import { HandlerCallback, JOmnis } from "./types"
 
-export class OmnisSocketClient implements ISocketClient {
+export class OmnisSocketClient extends AbstractSocketClient {
     private socket: JOmnis
-    private callbacks: Map<string, HandlerCallback>
     private callbackObject: { [message: string]: HandlerCallback }
 
     public constructor(omnisSocket: JOmnis) {
-        this.callbacks = new Map()
+        super()
         this.socket = omnisSocket
         // Prepara il callback object con i metodi standard di omnis
         this.callbackObject = {
@@ -16,19 +15,12 @@ export class OmnisSocketClient implements ISocketClient {
             },
             omnisOnWebSocketOpened: (): void => {
                 console.info("omnisOnWebSocketOpened")
-                this.fire("socketReady")
+                this.fire("socketReady", 0)
             },
             test: (data: any): void => {
                 console.log("TEST!")
                 console.log(data)
             },
-        }
-    }
-
-    private fire(evName: string, evData?: any): void {
-        const callback = this.callbacks.get(evName)
-        if (callback) {
-            callback(evData)
         }
     }
 
@@ -38,7 +30,7 @@ export class OmnisSocketClient implements ISocketClient {
             const parsedData = JSON.parse(evData)
             console.log(`Ricevuto messaggio ${messageName}`, evData, parsedData)
 
-            this.fire(messageName, parsedData)
+            this.fire(messageName, 0, parsedData)
         }
     }
 
@@ -50,12 +42,15 @@ export class OmnisSocketClient implements ISocketClient {
         }
     }
 
-    public sendMessage(name: string, data?: any): void {
+    public sendMessage(name: string, data?: any, callId?: number): void {
         console.info(`Invio l'evento ${name} `, data)
         if (!data) {
             data = {}
         }
-        this.socket.sendControlEvent({ name: name, data: JSON.stringify(data) })
+        if (callId === null || callId === undefined) {
+            callId = 0
+        }
+        this.socket.sendControlEvent({ name: name, data: JSON.stringify(data), callId: callId })
     }
 
     public close(): void {
