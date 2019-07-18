@@ -2,7 +2,8 @@
 // import "core-js/fn/array.find"
 // ...
 // import 'core-js'
-
+export * from "./SocketMessage"
+export * from "./SocketRequest"
 export * from "./AbstractSocketClient"
 export * from "./SocketClient"
 export * from "./OmnisSocketClient"

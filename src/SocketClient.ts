@@ -1,5 +1,6 @@
 import { AbstractSocketClient } from "./AbstractSocketClient"
 import { HandlerCallback } from "./types"
+import { SocketMessage } from "./SocketMessage"
 
 export class SocketClient extends AbstractSocketClient {
     public wsAddress: string
@@ -11,32 +12,33 @@ export class SocketClient extends AbstractSocketClient {
         this.socket = null
     }
 
-    public on(evName: string, callback: HandlerCallback): void {
-        this.callbacks.set(evName, callback)
-    }
-
     public open(): void {
         this.socket = new WebSocket(this.wsAddress)
 
         this.socket.onopen = (): void => {
             console.info(`Yay! Connesso a ${this.wsAddress}!`)
-            this.fire("socketReady", 0)
+            let message = new SocketMessage("socketReady", {}, 0)
+            this.fire(message)
         }
 
         this.socket.onmessage = (e: any | { data: any }): void => {
             // console.info("Yay! C'è un messaggio!", e.data)
             const evData = JSON.parse(e.data)
-            this.fire(evData.name, 0, evData.data)
+            let callId = evData.callId !== undefined ? evData.callId : 0
+            let message = new SocketMessage(evData.name, evData.data, callId)
+            this.fire(message)
         }
 
         this.socket.onerror = (e: any | { data: any }): void => {
             console.error("Oh shit!", e.data)
-            this.fire("socketError", 0, e.data)
+            let message = new SocketMessage("socketError", e.data, 0)
+            this.fire(message)
         }
 
         this.socket.onclose = (): void => {
             console.warn("Il server mi ha abbandonato!")
-            this.fire("socketClose", 0)
+            let message = new SocketMessage("socketClose", {}, 0)
+            this.fire(message)
         }
     }
 

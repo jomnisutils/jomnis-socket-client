@@ -1,6 +1,6 @@
-declare type SendResultEventFunction = (name: string, data?: any) => void
+import { SocketRequest } from "./SocketRequest"
 
-export declare type HandlerCallback = (req: any, res: SendResultEventFunction) => void
+export declare type HandlerCallback = (message: SocketRequest) => void
 
 export declare type JOmnis = {
     sendControlEvent: (data: any) => void
