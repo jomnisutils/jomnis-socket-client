@@ -1,5 +1,4 @@
 import { AbstractSocketClient } from "./AbstractSocketClient"
-import { HandlerCallback } from "./types"
 import { SocketMessage } from "./SocketMessage"
 
 export class SocketClient extends AbstractSocketClient {
@@ -42,15 +41,16 @@ export class SocketClient extends AbstractSocketClient {
         }
     }
 
-    public sendMessage(message: string, data?: any): void {
-        console.log(`Sending message ${message}`)
-        const jsonMessage = JSON.stringify({
-            name: message,
+    public sendMessage(name: string, data: any = {}, callId: number = 0): void {
+        console.log(`Sending message ${name}`)
+        const event = JSON.stringify({
+            name,
             data: data,
+            callId,
         })
-        console.log(jsonMessage)
+        console.info(`Sending ${name} `, event)
         if (this.socket) {
-            this.socket.send(jsonMessage)
+            this.socket.send(event)
         } else {
             throw new Error("Unset socket")
         }

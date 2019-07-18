@@ -4,6 +4,10 @@ import { SocketMessage } from "./SocketMessage"
 
 declare type JOmnisHandlerCallback = (data: string) => void
 
+/**
+ * The `jOmins` wrapper, it impleents the `callbackObject` requested from the
+ * Omnis html_controls framework.
+ */
 export class OmnisSocketClient extends AbstractSocketClient {
     private socket: JOmnis
     private callbackObject: { [message: string]: JOmnisHandlerCallback }
@@ -11,7 +15,7 @@ export class OmnisSocketClient extends AbstractSocketClient {
     public constructor(omnisSocket: JOmnis) {
         super()
         this.socket = omnisSocket
-        // Prepara il callback object con i metodi standard di omnis
+        // Standard callback object
         this.callbackObject = {
             omnisOnLoad: (): void => {
                 console.info("omnisOnLoad")
@@ -52,7 +56,7 @@ export class OmnisSocketClient extends AbstractSocketClient {
 
     public sendMessage(name: string, data: any = {}, callId: number = 0): void {
         const event = { name: name, data: JSON.stringify(data), callId: callId }
-        console.info(`Invio l'evento ${name} `, event)
+        console.info(`Sending ${name} `, event)
         this.socket.sendControlEvent(event)
     }
 

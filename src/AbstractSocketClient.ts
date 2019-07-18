@@ -2,6 +2,9 @@ import { HandlerCallback } from "./types"
 import { SocketRequest } from "./SocketRequest"
 import { SocketMessage } from "./SocketMessage"
 
+/**
+ * Abstract class with the common functionalities for both the socket kind
+ */
 export abstract class AbstractSocketClient {
     protected callbacks: Map<string, HandlerCallback>
     public constructor() {
