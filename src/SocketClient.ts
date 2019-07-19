@@ -17,7 +17,7 @@ export class SocketClient extends AbstractSocketClient {
         this.socket.onopen = (): void => {
             console.info(`Yay! Connesso a ${this.wsAddress}!`)
             let message = new SocketMessage("socketReady", {}, 0)
-            this.fire(message)
+            this.fire(message, true)
         }
 
         this.socket.onmessage = (e: any | { data: any }): void => {
@@ -25,19 +25,19 @@ export class SocketClient extends AbstractSocketClient {
             const evData = JSON.parse(e.data)
             let callId = evData.callId !== undefined ? evData.callId : 0
             let message = new SocketMessage(evData.name, evData.data, callId)
-            this.fire(message)
+            this.fire(message, false)
         }
 
         this.socket.onerror = (e: any | { data: any }): void => {
             console.error("Oh shit!", e.data)
             let message = new SocketMessage("socketError", e.data, 0)
-            this.fire(message)
+            this.fire(message, true)
         }
 
         this.socket.onclose = (): void => {
             console.warn("Il server mi ha abbandonato!")
             let message = new SocketMessage("socketClose", {}, 0)
-            this.fire(message)
+            this.fire(message, true)
         }
     }
 

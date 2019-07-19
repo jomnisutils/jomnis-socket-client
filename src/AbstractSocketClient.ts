@@ -28,18 +28,19 @@ export abstract class AbstractSocketClient {
      * Creates a request wrapper for the given message
      * @param socketMessage Original message
      */
-    protected buildRequest(socketMessage: SocketMessage): SocketRequest {
-        return new SocketRequest(socketMessage, this)
+    protected buildRequest(socketMessage: SocketMessage, sysEvent: boolean = false): SocketRequest {
+        return new SocketRequest(socketMessage, sysEvent, this)
     }
 
     /**
      * Fires the event related to the given socket message
      * @param socketMessage recevied message
+     * @param sysEvent lifecycle event
      */
-    protected fire(socketMessage: SocketMessage): void {
+    protected fire(socketMessage: SocketMessage, sysEvent: boolean = false): void {
         const callback = this.callbacks.get(socketMessage.name)
         if (callback) {
-            let request = this.buildRequest(socketMessage)
+            let request = this.buildRequest(socketMessage, sysEvent)
             callback(request)
             request.ensureResponse()
         }

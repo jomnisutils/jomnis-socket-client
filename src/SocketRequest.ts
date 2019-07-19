@@ -7,12 +7,14 @@ export class SocketRequest {
     private callId: number
     private responseSent: boolean
     public message: SocketMessage
+    private sysEvent: boolean
 
-    public constructor(message: SocketMessage, socketClient: AbstractSocketClient) {
+    public constructor(message: SocketMessage, sysEvent: boolean, socketClient: AbstractSocketClient) {
         this.message = message
         this.callId = message.callId
         this.socket = socketClient
         this.responseSent = false
+        this.sysEvent = sysEvent
     }
 
     private sendReturnMessage(ok: boolean, data?: any) {
@@ -44,10 +46,9 @@ export class SocketRequest {
 
     /**
      * If neccessary, sends an empty response to the requeste (to clear the callId).
-     * The response name is made by appending the "Done" suffix to the original event name
      */
     public ensureResponse() {
-        if (!this.responseSent) {
+        if (!this.responseSent && !this.sysEvent) {
             this.return()
         }
     }

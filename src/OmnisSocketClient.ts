@@ -23,7 +23,7 @@ export class OmnisSocketClient extends AbstractSocketClient {
             omnisOnWebSocketOpened: (): void => {
                 console.info("omnisOnWebSocketOpened")
                 let socketReadyMessage = new SocketMessage("socketReady", {}, 0)
-                this.fire(socketReadyMessage)
+                this.fire(socketReadyMessage, true)
             },
             test: (data: string): void => {
                 console.log("TEST!")
@@ -42,7 +42,7 @@ export class OmnisSocketClient extends AbstractSocketClient {
             const parsedPayload = JSON.parse(parsedData.payload)
             const callId = parsedData.callId
 
-            this.fire(new SocketMessage(messageName, parsedPayload, callId))
+            this.fire(new SocketMessage(messageName, parsedPayload, callId), false)
         }
     }
 
