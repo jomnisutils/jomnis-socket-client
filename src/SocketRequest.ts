@@ -1,5 +1,6 @@
 import { AbstractSocketClient } from "./AbstractSocketClient"
 import { SocketMessage } from "./SocketMessage"
+import { throws } from "assert"
 
 export class SocketRequest {
     private socket: AbstractSocketClient
@@ -47,7 +48,7 @@ export class SocketRequest {
      */
     public ensureResponse() {
         if (!this.responseSent) {
-            this.socket.sendMessage(`${this.message.name}Done`, {})
+            this.return()
         }
     }
 }
