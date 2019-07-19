@@ -14,14 +14,31 @@ export class SocketRequest {
         this.responseSent = false
     }
 
+    private sendReturnMessage(ok: boolean, data?: any) {
+        const name = `${this.message.name}_done`
+        const payload = {
+            status: ok,
+            data: data,
+        }
+        this.socket.sendMessage(name, payload, this.callId)
+        this.responseSent = true
+    }
+
     /**
      * Sends the response message with the correct `callId`
-     * @param name Message name
      * @param data Message payload
      */
-    public sendMessage(name: string, data?: any): void {
-        this.socket.sendMessage(name, data, this.callId)
-        this.responseSent = true
+    public return(data?: any): void {
+        this.sendReturnMessage(true, data)
+    }
+
+    public returnError(code: number = -1, desc: string = "", payload?: any): void {
+        const data = {
+            errorCode: code,
+            errorMessage: desc,
+            errorPayload: payload,
+        }
+        this.sendReturnMessage(false, data)
     }
 
     /**
