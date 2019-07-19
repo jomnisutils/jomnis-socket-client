@@ -1,6 +1,6 @@
 import { SocketRequest } from "./SocketRequest"
 
-export declare type HandlerCallback = (message: SocketRequest) => void
+export declare type HandlerCallback = (message: SocketRequest) => Promise<{} | void | undefined>
 
 export declare type JOmnis = {
     sendControlEvent: (data: any) => void

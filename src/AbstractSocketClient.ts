@@ -37,11 +37,11 @@ export abstract class AbstractSocketClient {
      * @param socketMessage recevied message
      * @param sysEvent lifecycle event
      */
-    protected fire(socketMessage: SocketMessage, sysEvent: boolean = false): void {
+    protected async fire(socketMessage: SocketMessage, sysEvent: boolean = false): Promise<void | {} | undefined> {
         const callback = this.callbacks.get(socketMessage.name)
         if (callback) {
             let request = this.buildRequest(socketMessage, sysEvent)
-            callback(request)
+            await callback(request)
             request.ensureResponse()
         }
     }
