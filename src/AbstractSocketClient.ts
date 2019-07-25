@@ -12,7 +12,8 @@ export abstract class AbstractSocketClient {
     }
 
     public abstract open(...args: any[]): void
-    public abstract sendMessage(message: string, data?: any, callId?: number): void
+    public abstract sendMessage(message: string, data?: any, status?: boolean, callId?: number): void
+
     public abstract close(): void
 
     /**

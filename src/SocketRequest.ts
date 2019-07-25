@@ -19,11 +19,7 @@ export class SocketRequest {
 
     private sendReturnMessage(ok: boolean, data?: any) {
         const name = `${this.message.name}_done`
-        const payload = {
-            status: ok,
-            data: data,
-        }
-        this.socket.sendMessage(name, payload, this.callId)
+        this.socket.sendMessage(name, data, ok, this.callId)
         this.responseSent = true
     }
 

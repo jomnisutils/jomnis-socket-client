@@ -41,11 +41,12 @@ export class SocketClient extends AbstractSocketClient {
         }
     }
 
-    public sendMessage(name: string, data: any = {}, callId: number = 0): void {
+    public sendMessage(name: string, data: any = {}, status: boolean = true, callId: number = 0): void {
         const event = JSON.stringify({
             name,
             data: data,
             callId,
+            status,
         })
         console.info(`Sending ${name}`, event)
         if (this.socket) {

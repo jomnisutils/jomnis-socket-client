@@ -54,8 +54,8 @@ export class OmnisSocketClient extends AbstractSocketClient {
         }
     }
 
-    public sendMessage(name: string, data: any = {}, callId: number = 0): void {
-        const event = { name: name, data: JSON.stringify(data), callId: callId }
+    public sendMessage(name: string, data: any = {}, status: boolean = true, callId: number = 0): void {
+        const event = { name: name, data: JSON.stringify(data), status, callId }
         console.info(`Sending ${name} `, event)
         this.socket.sendControlEvent(event)
     }
