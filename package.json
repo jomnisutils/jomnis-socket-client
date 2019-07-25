@@ -1,6 +1,6 @@
 {
     "name": "jomnis-socket-client",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "jOmnis wrapper which can also be used with a common W3C WebSocket",
     "keywords": [],
     "main": "dist/jomnis-socket-client.umd.js",
